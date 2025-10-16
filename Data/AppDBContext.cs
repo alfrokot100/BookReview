@@ -11,6 +11,7 @@ namespace BookReview.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<User> Users { get; set; }
     }
+    //Seedat data här lite senare
 
     
 }
