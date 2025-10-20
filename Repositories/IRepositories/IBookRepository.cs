@@ -10,7 +10,6 @@ namespace BookReview.Repositories.IRepositories
         Task<int> CreateBookAsync(Book book);
         Task<bool> UpdateBookAsync(Book book);
         Task<bool> DeleteBookAsync(int id);
-        Task<bool> SaveChangesAsync();
 
     }
 }
