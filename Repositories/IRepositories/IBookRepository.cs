@@ -7,9 +7,9 @@ namespace BookReview.Repositories.IRepositories
     {
         Task<IEnumerable<Book>> GetAllBooksAsync();
         Task<Book> GetBookByIdAsync(int id);
-        Task CreateBookAsync(Book book);
-        Task UpdateBookAsync(Book book);
-        Task DeleteBookAsync(int id);
+        Task<int> CreateBookAsync(Book book);
+        Task<bool> UpdateBookAsync(Book book);
+        Task<bool> DeleteBookAsync(int id);
         Task<bool> SaveChangesAsync();
 
     }

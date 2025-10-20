@@ -16,8 +16,8 @@ namespace BookReview.Services
         }
         public async Task<IEnumerable<BookDTO>> GetAllBooksAsync()
         {
-            var books = await _bookRepo.GetAllBooksAsync();
-            return books.Select(b => new BookDTO
+            var book = await _bookRepo.GetAllBooksAsync();
+            return book.Select(b => new BookDTO
             {
                 Id = b.Id,
                 Description = b.Description,
@@ -30,17 +30,17 @@ namespace BookReview.Services
 
         public async Task<BookDTO?> GetBookByIdAsync(int id)
         {
-            var books = await _bookRepo.GetBookByIdAsync(id);
-            if(books == null) { return null; }
+            var book = await _bookRepo.GetBookByIdAsync(id);
+            if(book == null) { return null; }
 
             return new BookDTO
             {
-                Id = books.Id,
-                Description = books.Description,
-                Author = books.Author,
-                Title = books.Title,
-                Genre = books.Genre,
-                PublishedYear = books.PublishedYear
+                Id = book.Id,
+                Description = book.Description,
+                Author = book.Author,
+                Title = book.Title,
+                Genre = book.Genre,
+                PublishedYear = book.PublishedYear
             };
         }
         public async Task<BookDTO> CreateBookAsync(BookCreateDTO dto)
@@ -50,10 +50,10 @@ namespace BookReview.Services
                 Title = dto.Title,
                 Description = dto.Description,
                 Author = dto.Author,
-                Genre = dto.Genre
+                Genre = dto.Genre,
+                PublishedYear = dto.PublishedYear
             };
             await _bookRepo.CreateBookAsync(book);
-            await _bookRepo.SaveChangesAsync();
 
             return new BookDTO
             {
@@ -61,7 +61,8 @@ namespace BookReview.Services
                 Title = book.Title,
                 Description = book.Description,
                 Author = book.Author,
-                Genre = book.Genre
+                Genre = book.Genre,
+                PublishedYear = book.PublishedYear
             };
         }
 
@@ -74,14 +75,13 @@ namespace BookReview.Services
             book.Description = dto.Description;
             book.Author = dto.Author;
             book.Genre = dto.Genre;
+            book.PublishedYear = dto.PublishedYear;
 
-            await _bookRepo.UpdateBookAsync(book);
-            return await _bookRepo.SaveChangesAsync();
+            return await _bookRepo.UpdateBookAsync(book);
         }
         public async Task<bool> DeleteBookAsync(int id)
         {
-            await _bookRepo.DeleteBookAsync(id);
-            return await _bookRepo.SaveChangesAsync();
+            return await _bookRepo.DeleteBookAsync(id);
         }
     }
 }
