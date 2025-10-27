@@ -2,6 +2,7 @@
 using BookReview.DTOs.BookDTOs;
 using BookReview.Models;
 using BookReview.Services;
+using BookReview.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,8 +12,8 @@ namespace BookReview.Controllers
     [Route("api/[controller]")]
     public class BookController : ControllerBase
     {
-        private readonly BookService _bookService;
-        public BookController(BookService bookService)
+        private readonly IBookService _bookService;
+        public BookController(IBookService bookService)
         {
             _bookService = bookService;
         }
