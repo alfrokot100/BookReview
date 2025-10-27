@@ -18,7 +18,7 @@ namespace BookReview.Repositories
         public async Task CreateUserAsync(User user)
         {
             await _context.Users.AddAsync(user);
-            // OBS: vi kör inte SaveChanges här — det görs i SaveChangesAsync för samma mönster som BookRepository
+
         }
 
         public async Task<User?> GetUserByEmailAsync(string email)
