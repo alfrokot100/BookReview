@@ -28,27 +28,31 @@ namespace BookReview.Repositories
                 .FirstOrDefaultAsync(b => b.Id == id);
             return books;
         }
-        public async Task CreateBookAsync(Book book)
+        public async Task<int> CreateBookAsync(Book book)
         {
             await _context.Books.AddAsync(book);
+            await _context.SaveChangesAsync();
+            return book.Id;
         }
-        public async Task UpdateBookAsync(Book book)
+        public async Task<bool> UpdateBookAsync(Book book)
         {
-            _context.Books.Update(book);
+            var existingBook = await _context.Books.FindAsync(book.Id);
+            if(existingBook == null) { return false; }
+
+            _context.Entry(existingBook).CurrentValues.SetValues(book);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public async Task DeleteBookAsync(int id)
+        public async Task<bool> DeleteBookAsync(int id)
         {
             var book = await GetBookByIdAsync(id);
-            if(book == null)
-            {
-                _context.Books.Remove(book);
-            }
-        }
+            if(book == null) { return false; }
 
-        public async Task<bool> SaveChangesAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
+            return true;
         }
+        
     }
 }
