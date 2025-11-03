@@ -4,6 +4,7 @@ using BookReview.Repositories.IRepositories;
 using BookReview.Repositories;
 using BookReview.Services;
 using Microsoft.EntityFrameworkCore;
+using BookReview.Services.IServices;
 
 namespace BookReview
 {
@@ -27,10 +28,13 @@ namespace BookReview
             });
 
             builder.Services.AddScoped<IBookRepository, BookRepository>();
-            builder.Services.AddScoped<BookService>();
+            builder.Services.AddScoped<IBookService, BookService>();
+
             builder.Services.AddScoped<UserService>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-
+            builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+            builder.Services.AddScoped<IReviewService, ReviewService>();
 
             var app = builder.Build();
 
@@ -42,8 +46,8 @@ namespace BookReview
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.MapControllers();
 
