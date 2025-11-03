@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35222.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookReview", "..\BookReview\BookReview.csproj", "{424B248D-5029-407B-9D67-B6671CFF77A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookReview", "BookReview\BookReview.csproj", "{E5DF988E-8672-4599-A78F-9B5B4992553C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookReview.MVC", "BookReview.MVC\BookReview.MVC.csproj", "{39FF61E1-93E1-454B-8B62-81CA06C8204F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{424B248D-5029-407B-9D67-B6671CFF77A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{424B248D-5029-407B-9D67-B6671CFF77A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{424B248D-5029-407B-9D67-B6671CFF77A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{424B248D-5029-407B-9D67-B6671CFF77A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5DF988E-8672-4599-A78F-9B5B4992553C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5DF988E-8672-4599-A78F-9B5B4992553C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5DF988E-8672-4599-A78F-9B5B4992553C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5DF988E-8672-4599-A78F-9B5B4992553C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39FF61E1-93E1-454B-8B62-81CA06C8204F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39FF61E1-93E1-454B-8B62-81CA06C8204F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39FF61E1-93E1-454B-8B62-81CA06C8204F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39FF61E1-93E1-454B-8B62-81CA06C8204F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
