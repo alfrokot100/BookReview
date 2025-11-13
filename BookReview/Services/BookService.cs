@@ -4,6 +4,7 @@ using BookReview.Models;
 using BookReview.Repositories.IRepositories;
 using BookReview.Services.IServices;
 using Microsoft.EntityFrameworkCore;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookReview.Services
 {
@@ -79,6 +80,22 @@ namespace BookReview.Services
 
             return await _bookRepo.UpdateBookAsync(book);
         }
+
+        public async Task<IEnumerable<BookDTO>> SearchBooksAsync(string query)
+        {
+            var books = await _bookRepo.SearchBooksAsync(query);
+
+            return books.Select(b => new BookDTO
+            {
+                Id = b.Id,
+                Title = b.Title,
+                Author = b.Author,
+                Description = b.Description,
+                Genre = b.Genre,
+                PublishedYear = b.PublishedYear
+            });
+        }
+
         public async Task<bool> DeleteBookAsync(int id)
         {
             return await _bookRepo.DeleteBookAsync(id);

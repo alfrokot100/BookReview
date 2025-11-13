@@ -1,4 +1,5 @@
 ﻿using BookReview.Models;
+using BookReview.MVC.Models;
 using System.Text.Json;
 
 namespace BookReview.MVC.Services
@@ -23,5 +24,12 @@ namespace BookReview.MVC.Services
                 PropertyNameCaseInsensitive = true
             })!;
         }
+
+        public async Task<BookViewModel?> GetBookByIdAsync(int id)
+        {
+            var book = await _http.GetFromJsonAsync<BookViewModel>($"api/book/{id}");
+            return book;
+        }
+
     }
 }
