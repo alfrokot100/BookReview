@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookReview.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20251008190818_TableFix")]
-    partial class TableFix
+    [Migration("20251106103619_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,6 +55,26 @@ namespace BookReview.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Books");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Author = "Italo Calvino",
+                            Description = "En poetisk samling av berättelser om tänkta städer.",
+                            Genre = "Fiktion",
+                            PublishedYear = 1972,
+                            Title = "Den osynliga staden"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Author = "Stieg Larsson",
+                            Description = "Första delen i Millennium-serien.",
+                            Genre = "Thriller",
+                            PublishedYear = 2005,
+                            Title = "Den eviga striden"
+                        });
                 });
 
             modelBuilder.Entity("BookReview.Models.Review", b =>
@@ -95,6 +115,26 @@ namespace BookReview.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Reviews");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            BookId_FK = 1,
+                            CreatedDate = new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Rating = 5,
+                            ReviewerName = "Alice Andersson",
+                            Text = "Otroligt gripande bok – kunde inte sluta läsa!"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            BookId_FK = 2,
+                            CreatedDate = new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Rating = 4,
+                            ReviewerName = "Björn Berg",
+                            Text = "Riktigt spännande, men lite förutsägbar på slutet."
+                        });
                 });
 
             modelBuilder.Entity("BookReview.Models.User", b =>
@@ -105,6 +145,9 @@ namespace BookReview.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -113,9 +156,45 @@ namespace BookReview.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "alice@example.com",
+                            Name = "Vicke Andersson",
+                            PasswordHash = "hash123",
+                            Role = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "bjorn@example.com",
+                            Name = "Björn Berg",
+                            PasswordHash = "hash456",
+                            Role = "User"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Email = "clara@example.com",
+                            Name = "Anders Hertig",
+                            PasswordHash = "hash789",
+                            Role = "User"
+                        });
                 });
 
             modelBuilder.Entity("BookReview.Models.Review", b =>

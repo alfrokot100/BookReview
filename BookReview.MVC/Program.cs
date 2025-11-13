@@ -10,6 +10,13 @@ namespace BookReview.MVC
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpClient<BookService>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7124/");
+
+            });
+            builder.Services.AddSession();
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
 
@@ -20,9 +27,6 @@ namespace BookReview.MVC
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            builder.Services.AddHttpClient<BookService>();
-
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
