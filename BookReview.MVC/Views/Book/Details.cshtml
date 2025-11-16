@@ -1,0 +1,36 @@
+﻿@model BookReview.MVC.Models.BookViewModel
+
+@{
+    ViewData["Title"] = "Bokdetaljer";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="text-primary mb-0">@Model.Title</h2>
+                <span class="badge bg-secondary fs-6">@Model.Genre</span>
+            </div>
+
+            <h5 class="text-muted mb-3">av @Model.Author</h5>
+
+            <p class="lead">@Model.Description</p>
+
+            <p class="text-muted">
+                <strong>Publicerad:</strong> @Model.PublishedYear
+            </p>
+
+            <hr />
+
+            <div class="mt-4 d-flex justify-content-between align-items-center">
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    ← Tillbaka till böcker
+                </a>
+
+                <button class="btn btn-primary" disabled>
+                    Lägg till recension (kommer snart)
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

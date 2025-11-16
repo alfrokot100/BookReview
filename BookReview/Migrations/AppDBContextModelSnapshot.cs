@@ -71,6 +71,24 @@ namespace BookReview.Migrations
                             Genre = "Thriller",
                             PublishedYear = 2005,
                             Title = "Den eviga striden"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Author = "Imre Kertész",
+                            Description = "En stark berättelse om en ung pojkes upplevelser under Förintelsen.",
+                            Genre = "Historisk roman",
+                            PublishedYear = 1975,
+                            Title = "Mannen utan öde"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Author = "Jane Austen",
+                            Description = "En tidlös berättelse om kärlek, stolthet och samhällsnormer i 1800-talets England.",
+                            Genre = "Klassiker",
+                            PublishedYear = 1813,
+                            Title = "Stolthet och fördom"
                         });
                 });
 

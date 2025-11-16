@@ -15,6 +15,13 @@ namespace BookReview.MVC
             // ---------------------------------------------------
 
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpClient<BookService>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7124/");
+
+            });
+            builder.Services.AddSession();
+            builder.Services.AddHttpContextAccessor();
 
             // LÄGG TILL DENNA FÖR ATT MATCHA LÄRARENS DEMO
             builder.Services.AddHttpClient("BookApi", client =>

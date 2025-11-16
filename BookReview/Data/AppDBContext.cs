@@ -38,6 +38,26 @@ namespace BookReview.Data
                     Genre = "Thriller",
                     Description = "Första delen i Millennium-serien.",
                     PublishedYear = 2005
+                },
+
+                new Book
+                {
+                    Id = 3,
+                    Title = "Mannen utan öde",
+                    Author = "Imre Kertész",
+                    Genre = "Historisk roman",
+                    Description = "En stark berättelse om en ung pojkes upplevelser under Förintelsen.",
+                    PublishedYear = 1975
+                },
+
+                new Book
+                {
+                    Id = 4,
+                    Title = "Stolthet och fördom",
+                    Author = "Jane Austen",
+                    Genre = "Klassiker",
+                    Description = "En tidlös berättelse om kärlek, stolthet och samhällsnormer i 1800-talets England.",
+                    PublishedYear = 1813
                 }
              );
 

@@ -43,6 +43,12 @@ namespace BookReview.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<IEnumerable<Book>> SearchBooksAsync(string query)
+        {
+            return await _context.Books
+                .Where(b => b.Title.Contains(query) || b.Author.Contains(query))
+                .ToListAsync();
+        }
 
         public async Task<bool> DeleteBookAsync(int id)
         {

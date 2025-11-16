@@ -59,5 +59,21 @@ namespace BookReview.Controllers
             return NoContent();
         }
 
+        [HttpGet("Search")]
+        public async Task<ActionResult<IEnumerable<BookDTO>>> SearchBooks([FromQuery] string query)
+        {
+            if (string.IsNullOrWhiteSpace(query)) 
+            {
+                return BadRequest("Sökningen får inte vara tom");
+            }
+
+            var books = await _bookService.SearchBooksAsync(query);
+            if (!books.Any()) { return NotFound(); }
+
+            return Ok(books);
+        }
+
+
+
     }
 }

@@ -1,0 +1,54 @@
+﻿@model IEnumerable<BookReview.MVC.Models.BookViewModel>
+
+@{
+    ViewData["Title"] = "Böcker";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">📚 Våra böcker</h2>
+
+        <!-- Sökfält -->
+        <form asp-action="Index" method="get" class="d-flex mb-4" style="max-width: 400px;">
+            <input type="text"
+                   name="searchString" class="form-control me-2" value="@Context.Request.Query["searchString"]"
+                placeholder="Sök efter titel eller författare..." />
+            <button type="submit" class="btn btn-outline-primary">Sök</button>
+        </form>
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-info text-center">
+            Inga böcker har lagts till ännu.
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var book in Model)
+            {
+                <div class="col">
+                    <div class="card shadow-sm h-100 border-0">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-primary fw-bold">@book.Title</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">@book.Author</h6>
+
+                            <p class="card-text text-truncate" style="max-height: 3.5em;">@book.Description</p>
+
+                            <div class="mt-2">
+                                <span class="badge bg-secondary">@book.Genre</span>
+                                <small class="text-muted d-block">Publicerad: @book.PublishedYear</small>
+                            </div>
+
+                            <a asp-action="Details" asp-route-id="@book.Id"
+                               class="btn btn-sm btn-outline-primary mt-auto align-self-start">
+                                Visa mer →
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
