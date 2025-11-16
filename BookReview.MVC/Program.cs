@@ -1,6 +1,4 @@
-// Du behöver inte denna "using" om du inte
-// använder en separat BookService-klass
-// using BookReview.MVC.Services; 
+using BookReview.MVC.Services;
 
 namespace BookReview.MVC
 {
@@ -10,10 +8,7 @@ namespace BookReview.MVC
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // ---------------------------------------------------
-            // 1. ALLA SERVICES REGISTRERAS HÄR
-            // ---------------------------------------------------
-
+            // Add services to the container.
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpClient<BookService>(client =>
             {
@@ -23,26 +18,13 @@ namespace BookReview.MVC
             builder.Services.AddSession();
             builder.Services.AddHttpContextAccessor();
 
-            // LÄGG TILL DENNA FÖR ATT MATCHA LÄRARENS DEMO
-            builder.Services.AddHttpClient("BookApi", client =>
-            {
-                // Hämta bas-URL:en från appsettings.json
-                // Se till att "ApiBaseUrl" finns i din appsettings!
-                client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]);
-            });
-
-            // ---------------------------------------------------
-            // 2. APPLIKATIONEN BYGGS HÄR (EFTER SERVICES)
-            // ---------------------------------------------------
             var app = builder.Build();
 
-
-            // ---------------------------------------------------
-            // 3. PIPELINE KONFIGURERAS HÄR
-            // ---------------------------------------------------
+            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
