@@ -12,9 +12,14 @@ namespace BookReview.MVC
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpClient<BookService>(client =>
             {
-                client.BaseAddress = new Uri("https://localhost:7124/");
-
+                client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]);
             });
+
+            builder.Services.AddHttpClient<ReviewService>(client =>
+            {
+                client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]);
+            });
+
             builder.Services.AddSession();
             builder.Services.AddHttpContextAccessor();
 

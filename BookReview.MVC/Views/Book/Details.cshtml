@@ -27,9 +27,12 @@
                     ← Tillbaka till böcker
                 </a>
 
-                <button class="btn btn-primary" disabled>
-                    Lägg till recension (kommer snart)
-                </button>
+                <a asp-controller="Review"
+                   asp-action="Create"
+                   asp-route-bookId="@Model.Id"
+                   class="btn btn-primary">
+                    Skriv en recension
+                </a>
             </div>
         </div>
     </div>

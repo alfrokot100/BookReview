@@ -27,7 +27,7 @@ namespace BookReview.MVC.Services
 
         public async Task<BookViewModel?> GetBookByIdAsync(int id)
         {
-            var book = await _http.GetFromJsonAsync<BookViewModel>($"api/book/{id}");
+            var book = await _http.GetFromJsonAsync<BookViewModel>($"book/{id}");
             return book;
         }
 

@@ -1,30 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using BookReview.MVC.Services;
-using BookReview.MVC.Models;
 using BookReview.Models;
+using System.Threading.Tasks;
 
 namespace BookReview.MVC.Controllers
 {
     public class ReviewController : Controller
     {
-        private readonly HttpClient _client;
+        private readonly ReviewService _reviewService;
 
-        public ReviewController(IHttpClientFactory clientFactory)
+        public ReviewController(ReviewService reviewService)
         {
-            _client = clientFactory.CreateClient("BookApi");
+            _reviewService = reviewService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var response = await _client.GetAsync("reviews");
-
-            if (!response.IsSuccessStatusCode)
-            {
-                return View(new List<ReviewViewModel>());
-            }
-
-            var reviewList = await response.Content.ReadFromJsonAsync<IEnumerable<ReviewViewModel>>();
-
+            var reviewList = await _reviewService.GetReviewsAsync();
             return View(reviewList);
         }
 
@@ -34,28 +26,24 @@ namespace BookReview.MVC.Controllers
             {
                 BookId_FK = bookId
             };
-
             return View(vm);
         }
 
-        // POST: Review/Create
         [HttpPost]
         public async Task<IActionResult> Create(ReviewViewModel newReview)
         {
             if (!ModelState.IsValid)
             {
                 return View(newReview);
-            }         
+            }
 
-            // https://localhost:xxxx/api/reviews
-            var response = await _client.PostAsJsonAsync("reviews", newReview);
+            var success = await _reviewService.CreateReviewAsync(newReview);
 
-            if (response.IsSuccessStatusCode)
+            if (success)
             {
                 return RedirectToAction("Details", "Book", new { id = newReview.BookId_FK });
             }
 
-            // Om något gick fel med API-anropet
             ModelState.AddModelError(string.Empty, "Could not save the review.");
             return View(newReview);
         }
