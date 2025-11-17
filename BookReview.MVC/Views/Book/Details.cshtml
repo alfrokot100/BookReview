@@ -1,4 +1,5 @@
-﻿@model BookReview.MVC.Models.BookViewModel
+﻿
+@model BookReview.MVC.ViewModels.BookDetailsViewModel
 
 @{
     ViewData["Title"] = "Bokdetaljer";
@@ -8,17 +9,13 @@
     <div class="card shadow-lg border-0">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="text-primary mb-0">@Model.Title</h2>
-                <span class="badge bg-secondary fs-6">@Model.Genre</span>
+                <h2 class="text-primary mb-0">@Model.Book.Title</h2>
+                <span class="badge bg-secondary fs-6">@Model.Book.Genre</span>
             </div>
 
-            <h5 class="text-muted mb-3">av @Model.Author</h5>
-
-            <p class="lead">@Model.Description</p>
-
-            <p class="text-muted">
-                <strong>Publicerad:</strong> @Model.PublishedYear
-            </p>
+            <h5 class="text-muted mb-3">av @Model.Book.Author</h5>
+            <p class="lead">@Model.Book.Description</p>
+            <p class="text-muted"><strong>Publicerad:</strong> @Model.Book.PublishedYear</p>
 
             <hr />
 
@@ -29,11 +26,33 @@
 
                 <a asp-controller="Review"
                    asp-action="Create"
-                   asp-route-bookId="@Model.Id"
+                   asp-route-bookId="@Model.Book.Id"
                    class="btn btn-primary">
                     Skriv en recension
                 </a>
             </div>
         </div>
+    </div>
+
+    <div class="mt-5">
+        <h3>Recensioner för @Model.Book.Title</h3>
+
+        @if (Model.Reviews != null && Model.Reviews.Any())
+        {
+            @foreach (var review in Model.Reviews)
+            {
+                <div class="card my-3">
+                    <div class="card-body">
+                        <h5 class="card-title">@review.ReviewerName</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Betyg: @review.Rating / 5</h6>
+                        <p class="card-text">@review.Text</p>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>Det finns inga recensioner för den här boken än. Bli den första!</p>
+        }
     </div>
 </div>
