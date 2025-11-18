@@ -10,7 +10,10 @@ namespace BookReview.MVC
 
             // Lägg till services här
             builder.Services.AddControllersWithViews();
-            builder.Services.AddHttpClient<BookService>(); // <-- flyttad hit
+            builder.Services.AddHttpClient<BookService>(client =>
+            {
+                client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]);
+            }); // <-- flyttad hit
 
             builder.Services.AddHttpClient<ReviewService>(client =>
             {
