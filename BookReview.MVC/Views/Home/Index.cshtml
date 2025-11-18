@@ -1,8 +1,101 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "BookReview Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<style>
+    /* Hela sidan med bakgrundsbild + gradient/fade */
+    body.home-background {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3)), url('/images/book-ai.jpg') no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+    }
+
+    /* Center för innehållet */
+    .content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+    }
+
+    h1.display-4 {
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    }
+
+    .lead {
+        margin-bottom: 30px;
+        font-size: 1.25rem;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    }
+
+    #aiForm {
+        max-width: 600px;
+        width: 100%;
+        background: rgba(0,0,0,0.6);
+        padding: 30px;
+        border-radius: 12px;
+    }
+
+    #aiResult {
+        margin-top: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        color: #000;
+        padding: 15px;
+        border-radius: 8px;
+        display: none;
+    }
+</style>
+
+<body class="home-background">
+    <div class="content">
+        <h1 class="display-4">Välkommen till BookReview</h1>
+        <p class="lead">
+            Här kan du läsa och skapa bokrecensioner med hjälp av vår AI-recensent.
+            Prova genom att skriva in en boktitel och en kort beskrivning!
+        </p>
+
+        <form id="aiForm" class="mx-auto">
+            <div class="mb-3">
+                <input type="text" class="form-control" id="title" placeholder="Boktitel" required />
+            </div>
+            <div class="mb-3">
+                <textarea class="form-control" id="description" rows="3" placeholder="Kort beskrivning av boken" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Generera recension</button>
+        </form>
+
+        <div id="aiResult"></div>
+    </div>
+</body>
+
+@section Scripts {
+    <script>
+        document.getElementById('aiForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+
+            const response = await fetch('/api/AI/review', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, description })
+            });
+
+            const result = await response.json();
+
+            const aiDiv = document.getElementById('aiResult');
+            aiDiv.style.display = 'block';
+            aiDiv.innerText = result.AIText || result;
+        });
+    </script>
+}

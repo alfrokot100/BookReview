@@ -1,10 +1,12 @@
-
 using BookReview.Data;
 using BookReview.Repositories.IRepositories;
 using BookReview.Repositories;
 using BookReview.Services;
-using Microsoft.EntityFrameworkCore;
 using BookReview.Services.IServices;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace BookReview
 {
@@ -14,31 +16,53 @@ namespace BookReview
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // ===== Configuration =====
+            var configuration = builder.Configuration;
 
+            // ===== OpenAI service (reads config via IConfiguration in its ctor) =====
+            builder.Services.AddSingleton<OpenAIService>();
+
+            // ===== Controllers & Swagger =====
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // ===== Database =====
             builder.Services.AddDbContext<AppDBContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             });
 
+            // ===== Repositories & Services =====
             builder.Services.AddScoped<IBookRepository, BookRepository>();
             builder.Services.AddScoped<IBookService, BookService>();
 
-            builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<UserService>();
 
             builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
             builder.Services.AddScoped<IReviewService, ReviewService>();
 
+            // ===== (Optional) Authentication setup if you use JWT =====
+            var jwtKey = configuration["Jwt:Key"];
+            if (!string.IsNullOrEmpty(jwtKey))
+            {
+                builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = false,
+                            ValidateAudience = false,
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+                        };
+                    });
+            }
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            // ===== Middleware pipeline =====
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -46,8 +70,13 @@ namespace BookReview
             }
 
             app.UseHttpsRedirection();
+
+            // Authentication must come before Authorization
+            if (!string.IsNullOrEmpty(jwtKey))
+            {
+                app.UseAuthentication();
+            }
             app.UseAuthorization();
-            app.UseAuthentication();
 
             app.MapControllers();
 
