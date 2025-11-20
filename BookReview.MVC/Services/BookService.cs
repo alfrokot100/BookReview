@@ -1,6 +1,8 @@
-﻿using BookReview.Models;
+﻿using System.Collections.Generic;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
 using BookReview.MVC.Models;
-using System.Text.Json;
 
 namespace BookReview.MVC.Services
 {
@@ -13,23 +15,46 @@ namespace BookReview.MVC.Services
             _http = http;
         }
 
-        public async Task<IEnumerable<Book>> GetAllBooksAsync()
+        public async Task<IEnumerable<BookViewModel>> GetAllAsync()
         {
-            var response = await _http.GetAsync("https://localhost:7124/api/book"); // API-url
-            response.EnsureSuccessStatusCode();
-
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<IEnumerable<Book>>(json, new JsonSerializerOptions
+            try
             {
-                PropertyNameCaseInsensitive = true
-            })!;
+                var result = await _http.GetFromJsonAsync<IEnumerable<BookViewModel>>("api/book");
+                return result ?? new List<BookViewModel>();
+            }
+            catch
+            {
+                return new List<BookViewModel>();
+            }
         }
 
-        public async Task<BookViewModel?> GetBookByIdAsync(int id)
+        public async Task<BookViewModel?> GetByIdAsync(int id)
         {
-            var book = await _http.GetFromJsonAsync<BookViewModel>($"api/book/{id}");
-            return book;
+            try
+            {
+                return await _http.GetFromJsonAsync<BookViewModel>($"api/book/{id}");
+            }
+            catch
+            {
+                return null;
+            }
         }
 
+        public async Task<IEnumerable<BookViewModel>> SearchAsync(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return new List<BookViewModel>();
+
+            try
+            {
+                var encoded = System.Net.WebUtility.UrlEncode(query);
+                var result = await _http.GetFromJsonAsync<IEnumerable<BookViewModel>>($"api/book/search?query={encoded}");
+                return result ?? new List<BookViewModel>();
+            }
+            catch
+            {
+                return new List<BookViewModel>();
+            }
+        }
     }
 }

@@ -1,50 +1,32 @@
 ﻿using BookReview.MVC.Models;
 using BookReview.MVC.Services;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace BookReview.MVC.Controllers
 {
     public class BookController : Controller
     {
         private readonly BookService _bookService;
-        private readonly HttpClient _httpClient;
 
-        public BookController(BookService bookService, HttpClient httpClient)
+        public BookController(BookService bookService)
         {
             _bookService = bookService;
-            _httpClient = httpClient;
         }
 
-        //Rteurnerar vyer
+        // /Book?searchString=...
         public async Task<IActionResult> Index(string? searchString)
         {
             IEnumerable<BookViewModel> books;
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                var response = await _httpClient.GetAsync($"https://localhost:7124/api/book/search?query={searchString}");
-                if (response.IsSuccessStatusCode)
-                {
-                    books = await response.Content.ReadFromJsonAsync<IEnumerable<BookViewModel>>();
-                }
-                else
-                {
-                    books = new List<BookViewModel>();
-                }
+                books = await _bookService.SearchAsync(searchString);
             }
             else
             {
-                //Hämtar alla böcker via API
-                var response = await _httpClient.GetAsync("https://localhost:7124/api/book");
-                if (response.IsSuccessStatusCode)
-                {
-                    books = await response.Content.ReadFromJsonAsync<IEnumerable<BookViewModel>>();
-                }
-                else
-                {
-                    books = new List<BookViewModel>();
-                }
+                books = await _bookService.GetAllAsync();
             }
 
             return View(books);
@@ -52,11 +34,9 @@ namespace BookReview.MVC.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
-            var book = await _bookService.GetBookByIdAsync(id);
-            if(book == null) { return NotFound(); }
-            
-            return View(book); // skickar modellen till Details.cshtml
+            var book = await _bookService.GetByIdAsync(id);
+            if (book == null) return NotFound();
+            return View(book);
         }
-
     }
 }

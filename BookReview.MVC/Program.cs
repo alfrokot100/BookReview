@@ -1,42 +1,33 @@
 using BookReview.MVC.Services;
 
-namespace BookReview.MVC
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddHttpClient("BookApi", client =>
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+    client.BaseAddress = new Uri("https://localhost:7124/"); // Byt till din backend-port
+});
 
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
-            builder.Services.AddHttpClient<BookService>(client =>
-            {
-                client.BaseAddress = new Uri("https://localhost:7124/");
+builder.Services.AddScoped<BookService>();
 
-            });
-            builder.Services.AddSession();
-            builder.Services.AddHttpContextAccessor();
+var app = builder.Build();
 
-            var app = builder.Build();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
+}
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+app.UseHttpsRedirection();
+app.UseStaticFiles();
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+app.UseRouting();
 
-            app.UseRouting();
+app.UseAuthorization();
 
-            app.UseAuthorization();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-
-            app.Run();
+app.Run();
