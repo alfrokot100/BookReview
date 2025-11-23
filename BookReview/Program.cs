@@ -20,13 +20,24 @@ namespace BookReview
             // ===== Configuration =====
             var configuration = builder.Configuration;
 
-            // ===== OpenAI service (reads config via IConfiguration in its ctor) =====
+            // ===== OpenAI service =====
             builder.Services.AddSingleton<OpenAIService>();
 
             // ===== Controllers & Swagger =====
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // ===== CORS – krävs för MVC-anrop =====
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowMVC", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
 
             // ===== Database =====
             builder.Services.AddDbContext<AppDBContext>(options =>
@@ -44,7 +55,7 @@ namespace BookReview
             builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
             builder.Services.AddScoped<IReviewService, ReviewService>();
 
-            // ===== (Optional) Authentication setup if you use JWT =====
+            // ===== (Optional) JWT Authentication =====
             var jwtKey = configuration["Jwt:Key"];
             if (!string.IsNullOrEmpty(jwtKey))
             {
@@ -72,7 +83,9 @@ namespace BookReview
 
             app.UseHttpsRedirection();
 
-            // Authentication must come before Authorization
+            // ===== Aktivera CORS (måste ligga innan Authentication & Authorization) =====
+            app.UseCors("AllowMVC");
+
             if (!string.IsNullOrEmpty(jwtKey))
             {
                 app.UseAuthentication();
@@ -85,3 +98,4 @@ namespace BookReview
         }
     }
 }
+

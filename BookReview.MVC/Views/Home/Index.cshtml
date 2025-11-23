@@ -1,101 +1,189 @@
 ﻿@{
-    ViewData["Title"] = "BookReview Home";
+    ViewData["Title"] = "Hem";
 }
 
 <style>
-    /* Hela sidan med bakgrundsbild + gradient/fade */
-    body.home-background {
-        margin: 0;
-        padding: 0;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.3)), url('/images/book-ai.jpg') no-repeat center center fixed;
-        background-size: cover;
-        color: white;
+    body {
+        background-color: #1e1e1e;
+        color: #fff;
+        font-family: Arial, sans-serif;
     }
 
-    /* Center för innehållet */
-    .content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+    h1, h2 {
+        color: #3a3fbd;
+        font-weight: bold;
         text-align: center;
-        padding: 20px;
     }
 
-    h1.display-4 {
-        margin-bottom: 20px;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    p {
+        color: #fff;
+        font-size: 1rem;
+        text-align: center;
     }
 
-    .lead {
-        margin-bottom: 30px;
-        font-size: 1.25rem;
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    .hero {
+        padding: 60px 20px;
+        text-align: center;
     }
 
-    #aiForm {
-        max-width: 600px;
-        width: 100%;
-        background: rgba(0,0,0,0.6);
+    .hero-buttons {
+        margin-top: 30px;
+    }
+
+        .hero-buttons a {
+            background-color: #3a3fbd;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            margin: 10px;
+            display: inline-block;
+            transition: background 0.3s ease;
+        }
+
+            .hero-buttons a:hover {
+                background-color: #6c8cff;
+                color: #1e1e1e;
+            }
+
+    /* Senaste recensioner */
+    #latest-reviews {
+        padding: 40px 20px;
+    }
+
+    .review-card {
+        background-color: #2a2a2a;
+        border-radius: 10px;
         padding: 30px;
-        border-radius: 12px;
+        margin: 20px auto;
+        width: 100%;
+        max-width: 900px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+        text-align: left;
     }
 
-    #aiResult {
-        margin-top: 20px;
-        background-color: rgba(255, 255, 255, 0.9);
-        color: #000;
-        padding: 15px;
-        border-radius: 8px;
-        display: none;
+        .review-card strong {
+            color: #3a3fbd;
+        }
+
+    /* Populära böcker */
+    #popular-books {
+        padding: 40px 20px;
     }
+
+    .books-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    .book-card {
+        background-color: #2a2a2a;
+        border-radius: 10px;
+        padding: 20px;
+        width: 200px;
+        text-align: center;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+
+        .book-card h4 {
+            color: #3a3fbd;
+            margin-bottom: 10px;
+        }
+
+    .ai-section {
+        padding: 40px 20px;
+        text-align: center;
+    }
+
+    #aiForm button {
+        background-color: #3a3fbd;
+        border: none;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 30px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+        #aiForm button:hover {
+            background-color: #6c8cff;
+            color: #1e1e1e;
+        }
 </style>
 
-<body class="home-background">
-    <div class="content">
-        <h1 class="display-4">Välkommen till BookReview</h1>
-        <p class="lead">
-            Här kan du läsa och skapa bokrecensioner med hjälp av vår AI-recensent.
-            Prova genom att skriva in en boktitel och en kort beskrivning!
-        </p>
-
-        <form id="aiForm" class="mx-auto">
-            <div class="mb-3">
-                <input type="text" class="form-control" id="title" placeholder="Boktitel" required />
-            </div>
-            <div class="mb-3">
-                <textarea class="form-control" id="description" rows="3" placeholder="Kort beskrivning av boken" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Generera recension</button>
-        </form>
-
-        <div id="aiResult"></div>
+<div class="hero">
+    <h1>Välkommen till Book Review!</h1>
+    <p>Upptäck böcker, läs recensioner eller låt AI skriva en recension åt dig!</p>
+    <div class="hero-buttons">
+        <a asp-controller="Book" asp-action="Index">Utforska böcker</a>
+        <a asp-controller="AIReview" asp-action="Index">AI Recension</a>
     </div>
-</body>
+</div>
 
-@section Scripts {
-    <script>
-        document.getElementById('aiForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
+<section id="latest-reviews">
+    <h2>Senaste Recensioner</h2>
 
-            const title = document.getElementById('title').value;
-            const description = document.getElementById('description').value;
+    <div class="review-card">
+        <strong>Boktitel:</strong> "Sapiens: En kort historik över mänskligheten"<br />
+        <strong>Recension:</strong>
+        <p>"En fascinerande genomgång av mänsklighetens historia, lättläst och mycket insiktsfull. Boken tar dig från mänsklighetens början till modern tid på ett spännande och pedagogiskt sätt."</p>
+        <strong>Användare:</strong> Anna<br />
+        <small>2025-11-21</small> | <a href="#" style="color:#6c8cff;">Läs mer</a>
+    </div>
 
-            const response = await fetch('/api/AI/review', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, description })
-            });
+    <div class="review-card">
+        <strong>Boktitel:</strong> "Harry Potter och de vises sten"<br />
+        <strong>Recension:</strong>
+        <p>"Magisk start på en fantastisk serie. Perfekt för både unga och vuxna. Berättelsen om Harry, Hogwarts och vännerna fångar fantasin direkt och gör det svårt att lägga ifrån sig boken."</p>
+        <strong>Användare:</strong> Erik<br />
+        <small>2025-11-20</small> | <a href="#" style="color:#6c8cff;">Läs mer</a>
+    </div>
 
-            const result = await response.json();
+    <div class="review-card">
+        <strong>Boktitel:</strong> "Män som hatar kvinnor"<br />
+        <strong>Recension:</strong>
+        <p>"Spännande thriller med komplexa karaktärer. Boken håller läsaren på tårna hela vägen. Larsson blandar mysterium med samhällskritik på ett briljant sätt."</p>
+        <strong>Användare:</strong> Lisa<br />
+        <small>2025-11-19</small> | <a href="#" style="color:#6c8cff;">Läs mer</a>
+    </div>
+</section>
 
-            const aiDiv = document.getElementById('aiResult');
-            aiDiv.style.display = 'block';
-            aiDiv.innerText = result.AIText || result;
-        });
-    </script>
-}
+<section id="popular-books">
+    <h2>Populära Böcker</h2>
+    <div class="books-grid">
+        <div class="book-card">
+            <h4>Sapiens</h4>
+            <p>⭐ 4.8/5</p>
+        </div>
+        <div class="book-card">
+            <h4>Harry Potter</h4>
+            <p>⭐ 4.7/5</p>
+        </div>
+        <div class="book-card">
+            <h4>Män som hatar kvinnor</h4>
+            <p>⭐ 4.6/5</p>
+        </div>
+        <div class="book-card">
+            <h4>Den lille prinsen</h4>
+            <p>⭐ 4.9/5</p>
+        </div>
+        <div class="book-card">
+            <h4>1984</h4>
+            <p>⭐ 4.7/5</p>
+        </div>
+    </div>
+</section>
+
+<section class="ai-section">
+    <h2>AI Recension</h2>
+    <p>Prova vår AI för att generera recensioner automatiskt!</p>
+    <form id="aiForm">
+        <button type="button">Generera Recension</button>
+    </form>
+</section>
