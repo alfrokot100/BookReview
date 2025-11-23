@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
+﻿using BookReview.Models;
 using BookReview.MVC.Models;
+using System.Text.Json;
 
 namespace BookReview.MVC.Services
 {
@@ -23,31 +21,15 @@ namespace BookReview.MVC.Services
             var json = await response.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<IEnumerable<BookViewModel>>(json, new JsonSerializerOptions
             {
-                return new List<BookViewModel>();
-            }
+                PropertyNameCaseInsensitive = true
+            })!;
         }
 
-        public async Task<BookViewModel?> GetByIdAsync(int id)
+        public async Task<BookViewModel?> GetBookByIdAsync(int id)
         {
             var book = await _http.GetFromJsonAsync<BookViewModel>($"book/{id}");
             return book;
         }
 
-        public async Task<IEnumerable<BookViewModel>> SearchAsync(string query)
-        {
-            if (string.IsNullOrWhiteSpace(query))
-                return new List<BookViewModel>();
-
-            try
-            {
-                var encoded = System.Net.WebUtility.UrlEncode(query);
-                var result = await _http.GetFromJsonAsync<IEnumerable<BookViewModel>>($"api/book/search?query={encoded}");
-                return result ?? new List<BookViewModel>();
-            }
-            catch
-            {
-                return new List<BookViewModel>();
-            }
-        }
     }
 }

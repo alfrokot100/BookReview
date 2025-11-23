@@ -29,11 +29,28 @@ namespace BookReview.MVC.Controllers
 
             if (!string.IsNullOrEmpty(searchString))
             {
-                books = await _bookService.SearchAsync(searchString);
+                var response = await _httpClient.GetAsync($"https://localhost:7124/api/book/search?query={searchString}");
+                if (response.IsSuccessStatusCode)
+                {
+                    books = await response.Content.ReadFromJsonAsync<IEnumerable<BookViewModel>>();
+                }
+                else
+                {
+                    books = new List<BookViewModel>();
+                }
             }
             else
             {
-                books = await _bookService.GetAllAsync();
+                //Hämtar alla böcker via API
+                var response = await _httpClient.GetAsync("https://localhost:7124/api/book");
+                if (response.IsSuccessStatusCode)
+                {
+                    books = await response.Content.ReadFromJsonAsync<IEnumerable<BookViewModel>>();
+                }
+                else
+                {
+                    books = new List<BookViewModel>();
+                }
             }
 
             return View(books);
@@ -57,5 +74,6 @@ namespace BookReview.MVC.Controllers
             // 4. Skicka den nya modellen till views - NY
             return View(viewModel); // skickar den nya modellen till Details.cshtml
         }
+
     }
 }
