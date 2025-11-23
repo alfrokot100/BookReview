@@ -1,4 +1,5 @@
 using BookReview.MVC.Services;
+using BookReview.Services;
 
 namespace BookReview.MVC
 {
@@ -8,17 +9,23 @@ namespace BookReview.MVC
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Lägg till services här
             builder.Services.AddControllersWithViews();
-            builder.Services.AddHttpClient<BookService>(); // <-- flyttad hit
 
-            builder.Services.AddHttpClient<ReviewService>(client =>
+
+            // Lägg till services här
+            builder.Services.AddHttpClient<BookReview.MVC.Services.BookService>();
+            builder.Services.AddHttpClient<BookReview.MVC.Services.ReviewService>(client =>
             {
                 client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]);
             });
 
+            builder.Services.AddSingleton<OpenAIService>();
+
+            builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession();
             builder.Services.AddHttpContextAccessor();
+
+            builder.Services.AddAuthorization();
 
             var app = builder.Build();
 

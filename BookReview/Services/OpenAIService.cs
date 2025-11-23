@@ -13,9 +13,9 @@ namespace BookReview.Services
 
         public OpenAIService()
         {
-            var endpoint = new Uri("https://bookai-demo.cognitiveservices.azure.com/");
+            var endpoint = new Uri("https://bookai-demo.services.ai.azure.com/");
             var deploymentName = "gpt-35-turbo";
-            var apiKey = "49XlqgivQxz75SQV2Z2hMBHIfRjuIjtrX8g9axwbJTrpO5SQOd35JQQJ99BJACOGoghi";
+            var apiKey = "49XlqgivQxz75SQV2Z2hMBHIfRjuIjtrX8g9axwbJTrpO5SQOd35JQQJ99BJACfhMk5XJ3w3AAABACOGoghi";
 
             var azureClient = new AzureOpenAIClient(endpoint, new AzureKeyCredential(apiKey));
             _chatClient = azureClient.GetChatClient(deploymentName);
