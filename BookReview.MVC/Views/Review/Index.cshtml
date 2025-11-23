@@ -1,40 +1,118 @@
-﻿@* Fil: Views/Review/Index.cshtml *@
-@model IEnumerable<BookReview.Models.ReviewViewModel>
+﻿@model IEnumerable<BookReview.Models.ReviewViewModel>
 
 @{
     ViewData["Title"] = "Alla recensioner";
 }
 
-<h1>Alla recensioner</h1>
+<style>
+    /* --- GLOBAL DESIGN (Dark Mode) --- */
+    body {
+        background-color: #1e1e1e;
+        color: #e0e0e0;
+    }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ReviewerName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Rating)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Text)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-                <tr>
-                    <td>
-                    @Html.DisplayFor(modelItem => item.ReviewerName)
-                    </td>
-                    <td>
-                    @Html.DisplayFor(modelItem => item.Rating) stjärnor
-                    </td>
-                    <td>
-                    @Html.DisplayFor(modelItem => item.Text)
-                    </td>
-                </tr>
+    /* --- KORTET (Containern) --- */
+    .card {
+        background-color: #2a2a2a;
+        color: #e0e0e0;
+        border-radius: 16px;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    /* --- RUBRIKER --- */
+    h1, h2, h3 {
+        color: #e0e0e0 !important;
+        font-family: 'Playfair Display', serif; /* Om du vill ha serif-fonten här också */
+    }
+
+    /* --- TABELL-DESIGN FÖR DARK MODE --- */
+    .table {
+        color: #e0e0e0;
+        border-color: #444; /* Mörkare linjer */
+    }
+
+        /* Tabell-huvud */
+        .table thead th {
+            border-bottom: 2px solid #4e73df; /* Blå linje under rubrikerna */
+            color: #fff;
+            font-weight: 600;
         }
-    </tbody>
-</table>
+
+        /* Tabell-rader */
+        .table td, .table th {
+            border-top: 1px solid #444;
+            padding: 1rem 0.75rem;
+            vertical-align: middle;
+        }
+
+    /* Hover-effekt på rader */
+    .table-hover tbody tr:hover {
+        background-color: #333; /* Lite ljusare när man för musen över */
+        color: #fff;
+    }
+
+    /* Guldstjärnor i listan */
+    .text-warning {
+        color: #ffc107 !important;
+        text-shadow: 0 0 5px rgba(255, 193, 7, 0.3);
+    }
+</style>
+
+<div class="container mt-5">
+
+    <div class="card p-4">
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="mb-0">Alla recensioner</h1>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width: 20%;">Recensent</th>
+                                <th style="width: 20%;">Betyg</th>
+                                <th style="width: 60%;">Recension</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="fw-bold">
+                                        @Html.DisplayFor(modelItem => item.ReviewerName)
+                                    </td>
+
+                                    <td>
+                                        <span class="text-warning" style="font-size: 1.2rem;">
+                                            @for (int i = 0; i < item.Rating; i++)
+                                            {
+                                                <span>★</span>
+                                            }
+                                        </span>
+                                        <span class="text-muted small ms-2">(@item.Rating/5)</span>
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Text)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-dark border-secondary text-center p-5">
+                    <h4>Inga recensioner hittades.</h4>
+                    <p class="text-muted">Var den första att skriva en recension!</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
