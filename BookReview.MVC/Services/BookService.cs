@@ -15,15 +15,18 @@ namespace BookReview.MVC.Services
 
         public async Task<IEnumerable<BookViewModel>> GetAllBooksAsync()
         {
-            var response = await _http.GetAsync("https://localhost:7124/api/book"); // API-url
-            response.EnsureSuccessStatusCode();
+			//var response = await _http.GetAsync("https://localhost:7124/api/book"); // API-url
+			//response.EnsureSuccessStatusCode();
 
-            var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<IEnumerable<BookViewModel>>(json, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            })!;
-        }
+			//var json = await response.Content.ReadAsStringAsync();
+			//return JsonSerializer.Deserialize<IEnumerable<BookViewModel>>(json, new JsonSerializerOptions
+			//{
+			//    PropertyNameCaseInsensitive = true
+			//})!;
+
+			var books = await _http.GetFromJsonAsync<IEnumerable<BookViewModel>>("book");
+			return books ?? new List<BookViewModel>();
+		}
 
         public async Task<BookViewModel?> GetBookByIdAsync(int id)
         {
