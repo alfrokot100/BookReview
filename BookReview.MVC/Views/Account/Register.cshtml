@@ -1,0 +1,27 @@
+﻿@model BookReview.MVC.Models.RegisterViewModel
+
+<h2>Registrera dig</h2>
+
+<form method="post">
+    <div>
+        <label>Namn</label>
+        <input asp-for="Name" />
+    </div>
+
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" />
+    </div>
+
+    <div>
+        <label>Lösenord</label>
+        <input asp-for="Password" type="password" />
+    </div>
+
+    <button type="submit">Registrera</button>
+</form>
+
+@if (ViewBag.Error != null)
+{
+    <p style="color:red">@ViewBag.Error</p>
+}
