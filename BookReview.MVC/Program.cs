@@ -8,13 +8,15 @@ namespace BookReview.MVC
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+          
+            // L√§gg till services h√§r
             builder.Services.AddControllersWithViews();
+            builder.Services.AddHttpClient<BookService>(client =>
+            {
+                client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]);
+            }); // <-- flyttad hit
 
-
-            // L‰gg till services h‰r
-            builder.Services.AddHttpClient<BookReview.MVC.Services.BookService>();
-            builder.Services.AddHttpClient<BookReview.MVC.Services.ReviewService>(client =>
+            builder.Services.AddHttpClient<ReviewService>(client =>
             {
                 client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"]);
             });
