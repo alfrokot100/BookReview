@@ -1,0 +1,40 @@
+﻿@* Fil: Views/Review/Index.cshtml *@
+@model IEnumerable<BookReview.Models.ReviewViewModel>
+
+@{
+    ViewData["Title"] = "Alla recensioner";
+}
+
+<h1>Alla recensioner</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ReviewerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Text)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+                <tr>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.ReviewerName)
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.Rating) stjärnor
+                    </td>
+                    <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>

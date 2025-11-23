@@ -15,14 +15,13 @@ namespace BookReview.MVC.Services
             _http = http;
         }
 
-        public async Task<IEnumerable<BookViewModel>> GetAllAsync()
+        public async Task<IEnumerable<BookViewModel>> GetAllBooksAsync()
         {
-            try
-            {
-                var result = await _http.GetFromJsonAsync<IEnumerable<BookViewModel>>("api/book");
-                return result ?? new List<BookViewModel>();
-            }
-            catch
+            var response = await _http.GetAsync("https://localhost:7124/api/book"); // API-url
+            response.EnsureSuccessStatusCode();
+
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<IEnumerable<BookViewModel>>(json, new JsonSerializerOptions
             {
                 return new List<BookViewModel>();
             }
@@ -30,14 +29,8 @@ namespace BookReview.MVC.Services
 
         public async Task<BookViewModel?> GetByIdAsync(int id)
         {
-            try
-            {
-                return await _http.GetFromJsonAsync<BookViewModel>($"api/book/{id}");
-            }
-            catch
-            {
-                return null;
-            }
+            var book = await _http.GetFromJsonAsync<BookViewModel>($"book/{id}");
+            return book;
         }
 
         public async Task<IEnumerable<BookViewModel>> SearchAsync(string query)

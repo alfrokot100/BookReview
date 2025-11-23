@@ -1,0 +1,15 @@
+﻿@model BookReview.MVC.Models.BookViewModel
+
+<h1>@Model.Title</h1>
+<p>Av: @Model.Author</p>
+<hr />
+<p>@Model.Description</p>
+
+<hr />
+
+<a asp-controller="Review"
+   asp-action="Create"
+   asp-route-bookId="@Model.Id"
+   class="btn btn-primary">
+	Skriv en recension för den här boken
+</a>
