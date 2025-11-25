@@ -1,5 +1,6 @@
-﻿@{
-    ViewData["Title"] = "AI Bokrecensioner";
+﻿@model BookReview.MVC.Models.AiViewModel
+@{
+    ViewData["Title"] = "AI Bokrecension";
 }
 
 <style>
@@ -12,131 +13,60 @@
     .content {
         max-width: 800px;
         margin: 50px auto;
-        padding: 0 15px;
     }
 
-    h1.display-4 {
-        color: #6c8cff;
-        font-weight: 700;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    .lead {
-        margin-bottom: 40px;
-        font-size: 1.25rem;
-        color: #e0e0e0;
-        text-align: center;
-    }
-
-    #aiForm {
+    form, #aiResult {
         background-color: #2a2a2a;
-        padding: 40px;
+        padding: 30px;
         border-radius: 16px;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.4);
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
+        margin-top: 20px;
     }
 
-        #aiForm input,
-        #aiForm textarea {
-            background-color: #1e1e1e;
-            color: #e0e0e0;
-            border: 1px solid #555;
-            border-radius: 12px;
-            padding: 15px;
-            width: 100%;
-            font-size: 1rem;
-        }
-
-            #aiForm input::placeholder,
-            #aiForm textarea::placeholder {
-                color: #aaa;
-            }
-
-        #aiForm button {
-            background-color: #3a3fbd;
-            border: none;
-            color: white;
-            padding: 15px;
-            border-radius: 30px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-            #aiForm button:hover {
-                background-color: #6c8cff;
-                color: #1e1e1e;
-            }
-
-    #aiResult {
-        margin-top: 30px;
-        background-color: #2a2a2a;
+    input, textarea {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border-radius: 8px;
+        border: 1px solid #555;
+        background-color: #1e1e1e;
         color: #e0e0e0;
-        padding: 20px;
-        border-radius: 16px;
-        display: none;
-        white-space: pre-wrap;
-        box-shadow: 0 6px 20px rgba(0,0,0,0.4);
     }
+
+    button {
+        margin-top: 20px;
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 30px;
+        background: #3a3fbd;
+        color: white;
+    }
+
+        button:hover {
+            background: #6c8cff;
+            color: #1e1e1e;
+        }
 </style>
 
 <div class="content">
     <h1 class="display-4">📖 AI Bokrecensioner</h1>
-    <p class="lead">Skriv in en boktitel och beskrivning, och vår AI skapar en recension åt dig.</p>
+    <p class="lead">Skriv in en titel och en kort beskrivning, så genererar AI en recension.</p>
 
-    <form id="aiForm">
-        <input type="text" id="title" placeholder="Boktitel" required />
-        <textarea id="description" rows="5" placeholder="Kort beskrivning av boken" required></textarea>
+    <form asp-action="Index" method="post">
+        <label>Boktitel</label>
+        <input asp-for="Title" placeholder="Boktitel" required />
+
+        <label>Beskrivning</label>
+        <textarea asp-for="Description" rows="5" placeholder="Kort beskrivning av boken" required></textarea>
+
         <button type="submit">Generera recension</button>
     </form>
 
-    <div id="aiResult"></div>
+    @if (Model.AIText != null)
+    {
+        <div id="aiResult">
+            <h2>📘 AI Recension</h2>
+            <p>@Model.AIText</p>
+        </div>
+    }
 </div>
-
-@section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.getElementById('aiForm');
-            const aiDiv = document.getElementById('aiResult');
-
-            form.addEventListener('submit', async function (e) {
-                e.preventDefault();
-
-                const title = document.getElementById('title').value.trim();
-                const description = document.getElementById('description').value.trim();
-
-                aiDiv.style.display = 'none';
-                aiDiv.innerText = '';
-
-                try {
-                    const response = await fetch('/api/AI/review', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ title, description })
-                    });
-
-                    let resultText = '';
-
-                    if (response.ok) {
-                        const result = await response.json();
-                        resultText = result.aiText || 'Inget resultat från AI.';
-                    } else {
-                        const text = await response.text();
-                        resultText = `Fel från servern: ${text}`;
-                    }
-
-                    aiDiv.style.display = 'block';
-                    aiDiv.innerText = resultText;
-                } catch (error) {
-                    aiDiv.style.display = 'block';
-                    aiDiv.innerText = `Ett fel uppstod: ${error.message}`;
-                }
-            });
-        });
-    </script>
-}
-
