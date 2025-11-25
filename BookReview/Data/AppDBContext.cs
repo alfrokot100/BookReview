@@ -299,7 +299,7 @@ namespace BookReview.Data
                     Title = "Änglamakerskan",
                     Author = "Camilla Läckberg",
                     Genre = "Kriminalroman",
-                    Description = "Ett gammalt fall med en 'änglamakerska' från 1970-talet får ny aktualitet när en serie nya brott med liknande mönster inträffar i Fjällbacka.",
+                    Description = "Ett gammalt fall med en speciell 'änglamakerska' från 1970-talet får ny aktualitet när en serie nya brott med liknande mönster inträffar i Fjällbacka.",
                     PublishedYear = 2011
                 },
 

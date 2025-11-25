@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookReview.Migrations
 {
     [DbContext(typeof(AppDBContext))]
-    [Migration("20251119105829_NewDataInit")]
-    partial class NewDataInit
+    [Migration("20251125140418_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -304,7 +304,7 @@ namespace BookReview.Migrations
                         {
                             Id = 28,
                             Author = "Camilla Läckberg",
-                            Description = "Ett gammalt fall med en 'änglamakerska' från 1970-talet får ny aktualitet när en serie nya brott med liknande mönster inträffar i Fjällbacka.",
+                            Description = "Ett gammalt fall med en speciell 'änglamakerska' från 1970-talet får ny aktualitet när en serie nya brott med liknande mönster inträffar i Fjällbacka.",
                             Genre = "Kriminalroman",
                             PublishedYear = 2011,
                             Title = "Änglamakerskan"
