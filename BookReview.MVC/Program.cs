@@ -7,7 +7,17 @@ namespace BookReview.MVC
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-          
+            // Lägg till CORS här
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             // Lägg till services här
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpClient<BookService>(client =>
@@ -34,6 +44,8 @@ namespace BookReview.MVC
             builder.Services.AddAuthorization();
 
             var app = builder.Build();
+
+            app.UseCors("AllowAll");
 
 
             // Configure the HTTP request pipeline
