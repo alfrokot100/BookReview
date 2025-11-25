@@ -48,8 +48,11 @@ namespace BookReview.MVC
             app.UseCors("AllowAll");
 
 
-            // Configure the HTTP request pipeline
-            if (!app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage(); // Visa detaljerade fel
+            }
+            else
             {
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
