@@ -14,23 +14,6 @@ body {
     margin-bottom: 60px;
 }
 
-    /*  Stjärnorna */
-    .review-page-wrapper .star-rating input[type="radio"] {
-        display: none;
-    }
-
-    .review-page-wrapper .star-rating label {
-        font-size: 2.5rem;
-        color: #e0daca; /* Tom stjärna (samma som ramen) */
-        cursor: pointer;
-        transition: color 0.2s ease;
-    }
-
-     /* Hover- och checked-effekter för stjärnor */
-     .review-page-wrapper .star-rating label:hover,
-        .review-page-wrapper .star-rating label:hover ~ label,
-        .review-page-wrapper .star-rating input[type="radio"]:checked ~ label {
-            color: #A67B5B; /* Fylld stjärna  */
-        }
+    
 
     

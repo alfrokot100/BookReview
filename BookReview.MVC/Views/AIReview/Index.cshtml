@@ -1,0 +1,72 @@
+﻿@model BookReview.MVC.Models.AiViewModel
+@{
+    ViewData["Title"] = "AI Bokrecension";
+}
+
+<style>
+    body {
+        background-color: #1e1e1e;
+        color: #e0e0e0;
+        font-family: Arial, sans-serif;
+    }
+
+    .content {
+        max-width: 800px;
+        margin: 50px auto;
+    }
+
+    form, #aiResult {
+        background-color: #2a2a2a;
+        padding: 30px;
+        border-radius: 16px;
+        margin-top: 20px;
+    }
+
+    input, textarea {
+        width: 100%;
+        padding: 12px;
+        margin-top: 10px;
+        border-radius: 8px;
+        border: 1px solid #555;
+        background-color: #1e1e1e;
+        color: #e0e0e0;
+    }
+
+    button {
+        margin-top: 20px;
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 30px;
+        background: #3a3fbd;
+        color: white;
+    }
+
+        button:hover {
+            background: #6c8cff;
+            color: #1e1e1e;
+        }
+</style>
+
+<div class="content">
+    <h1 class="display-4">📖 AI Bokrecensioner</h1>
+    <p class="lead">Skriv in en titel och en kort beskrivning, så genererar AI en recension.</p>
+
+    <form asp-action="Index" method="post">
+        <label>Boktitel</label>
+        <input asp-for="Title" placeholder="Boktitel" required />
+
+        <label>Beskrivning</label>
+        <textarea asp-for="Description" rows="5" placeholder="Kort beskrivning av boken" required></textarea>
+
+        <button type="submit">Generera recension</button>
+    </form>
+
+    @if (Model.AIText != null)
+    {
+        <div id="aiResult">
+            <h2>📘 AI Recension</h2>
+            <p>@Model.AIText</p>
+        </div>
+    }
+</div>

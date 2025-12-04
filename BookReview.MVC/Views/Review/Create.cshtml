@@ -1,53 +1,152 @@
 ﻿@model BookReview.Models.ReviewViewModel
 
-<div class="review-page-wrapper">
-    <div class="row">
-        <div class="col-md-8 col-lg-6 mx-auto">
+@{
+    ViewData["Title"] = "Skriv en recension på boken ";
+}
 
-            <div class="review-form-container">
+<style>
+    body {
+        background-color: #1e1e1e;
+        color: #e0e0e0;
+    }
 
-                <h3 class="text-center mb-4">📖 Skriv en recension</h3>
-                <hr class="mb-4" />
+    .card {
+        background-color: #2a2a2a;
+        color: #e0e0e0;
+        border-radius: 16px;
+        border: none;
+    }
 
-                <form asp-action="Create" method="post">
-                    <div asp-validation-summary="All" class="text-danger"></div>
 
-                    <input type="hidden" asp-for="BookId_FK" />
+    h2, h3, h5, p, strong, label {
+        color: #e0e0e0 !important;
+    }
 
-                    <div class="mb-3">
-                        <label asp-for="ReviewerName" class="form-label"></label>
-                        <input asp-for="ReviewerName" class="form-control" />
-                        <span asp-validation-for="ReviewerName" class="text-danger"></span>
-                    </div>
+    .text-muted {
+        color: #adb5bd !important; 
+    }
 
-                    <div class="mb-3">
-                        <label asp-for="Rating" class="form-label"></label>
-                        <div class="star-rating d-flex flex-row-reverse justify-content-end">
-                            <input type="radio" id="star5" name="Rating" value="5" />
-                            <label for="star5" title="5 stjärnor">★</label>
-                            <input type="radio" id="star4" name="Rating" value="4" />
-                            <label for="star4" title="4 stjärnor">★</label>
-                            <input type="radio" id="star3" name="Rating" value="3" />
-                            <label for="star3" title="3 stjärnor">★</label>
-                            <input type="radio" id="star2" name="Rating" value="2" />
-                            <label for="star2" title="2 stjärnor">★</label>
-                            <input type="radio" id="star1" name="Rating" value="1" />
-                            <label for="star1" title="1 stjärna">★</label>
-                        </div>
-                        <span asp-validation-for="Rating" class="text-danger"></span>
-                    </div>
+    .form-control {
+        background-color: #333 !important;
+        color: #fff !important;
+        border: 1px solid #444;
+        border-radius: 8px;
+    }
 
-                    <div class="mb-3">
-                        <label asp-for="Text" class="form-label"></label>
-                        <textarea asp-for="Text" class="form-control" rows="4"></textarea>
-                        <span asp-validation-for="Text" class="text-danger"></span>
-                    </div>
+        .form-control:focus {
+            background-color: #333 !important;
+            color: #fff !important;
+            border-color: #4e73df; 
+            box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.25);
+        }
 
-                    <div class="mb-3">
-                        <button type="submit" class="btn btn-cozy w-100">Skicka recension</button>
-                    </div>
-                </form>
+        .form-control::placeholder {
+            color: #888;
+        }
+
+
+    .btn-primary {
+        background-color: #4e73df;
+        border-color: #4e73df;
+        padding: 10px 30px;
+        font-weight: 500;
+        border-radius: 8px;
+    }
+
+        .btn-primary:hover {
+            background-color: #375a7f;
+            border-color: #375a7f;
+        }
+
+    .btn-outline-secondary {
+        border-color: #666;
+        color: #e0e0e0;
+        padding: 10px 30px;
+        border-radius: 8px;
+    }
+
+        .btn-outline-secondary:hover {
+            background-color: #666;
+            color: #fff;
+        }
+
+    .star-rating input[type="radio"] {
+        display: none;
+    }
+
+    .star-rating label {
+        font-size: 3.5rem;
+        color: #444 !important; 
+        cursor: pointer;
+        transition: color 0.2s ease, text-shadow 0.2s ease;
+        padding: 0 2px;
+        line-height: 1;
+    }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label,
+        .star-rating input[type="radio"]:checked ~ label {
+            color: #EFBF04 !important;
+            text-shadow: 0 0 20px rgba(166, 123, 91, 0.8), 0 0 10px rgba(166, 123, 91, 0.6) !important;
+        }
+</style>
+
+<div class="container mt-5">
+
+    <div class="card shadow-lg mx-auto" style="max-width: 800px;">
+        <div class="card-body p-5">
+
+            <div class="text-center mb-4">
+                <h2 class="mb-2">📖 Skriv en recension</h2>
+                <p class="lead text-muted">Vad tyckte du om boken?</p>
             </div>
+
+            <hr class="mb-4" style="border-color: #444;" />
+
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                <input type="hidden" asp-for="BookId_FK" />
+
+                <div class="mb-4">
+                    <label asp-for="ReviewerName" class="form-label h5">Ditt namn</label>
+                    <input asp-for="ReviewerName" class="form-control form-control-lg" placeholder="T.ex. Anna Andersson" />
+                    <span asp-validation-for="ReviewerName" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label h5">Betyg</label>
+                    <div class="star-rating d-flex flex-row-reverse justify-content-end">
+                        <input type="radio" id="star5" name="Rating" value="5" />
+                        <label for="star5" title="5 stjärnor">★</label>
+
+                        <input type="radio" id="star4" name="Rating" value="4" />
+                        <label for="star4" title="4 stjärnor">★</label>
+
+                        <input type="radio" id="star3" name="Rating" value="3" />
+                        <label for="star3" title="3 stjärnor">★</label>
+
+                        <input type="radio" id="star2" name="Rating" value="2" />
+                        <label for="star2" title="2 stjärnor">★</label>
+
+                        <input type="radio" id="star1" name="Rating" value="1" />
+                        <label for="star1" title="1 stjärna">★</label>
+                    </div>
+                    <span asp-validation-for="Rating" class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="Text" class="form-label h5">Din recension</label>
+                    <textarea asp-for="Text" class="form-control" rows="5" placeholder="Berätta vad du tyckte..."></textarea>
+                    <span asp-validation-for="Text" class="text-danger"></span>
+                </div>
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
+                    <a asp-controller="Book" asp-action="Details" asp-route-id="@Model.BookId_FK" class="btn btn-outline-secondary">Avbryt</a>
+
+                    <button type="submit" class="btn btn-primary">Skicka recension</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

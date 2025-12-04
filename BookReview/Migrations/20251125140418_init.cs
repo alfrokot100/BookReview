@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -7,16 +8,83 @@
 namespace BookReview.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedMoreSeedBooks : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Genre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PublishedYear = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ReviewerName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    BookId_FK = table.Column<int>(type: "int", nullable: false),
+                    BookId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Reviews_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.InsertData(
                 table: "Books",
                 columns: new[] { "Id", "Author", "Description", "Genre", "PublishedYear", "Title" },
                 values: new object[,]
                 {
+                    { 1, "Italo Calvino", "En poetisk samling av berättelser om tänkta städer.", "Fiktion", 1972, "Den osynliga staden" },
+                    { 2, "Stieg Larsson", "Första delen i Millennium-serien.", "Thriller", 2005, "Den eviga striden" },
+                    { 3, "Imre Kertész", "En stark berättelse om en ung pojkes upplevelser under Förintelsen.", "Historisk roman", 1975, "Mannen utan öde" },
+                    { 4, "Jane Austen", "En tidlös berättelse om kärlek, stolthet och samhällsnormer i 1800-talets England.", "Klassiker", 1813, "Stolthet och fördom" },
                     { 5, "J.K. Rowling", "Den föräldralöse Harry Potter upptäcker på sin elfte födelsedag att han är en trollkarl och börjar på Hogwarts skola för häxkonster och trolldom.", "Fantasy", 1997, "Harry Potter och de vises sten" },
                     { 6, "J.K. Rowling", "Harrys andra år på Hogwarts involverar en mörk hemlighet, en gammal dagbok och en mystisk varelse som attackerar elever.", "Fantasy", 1998, "Harry Potter och Hemligheternas kammare" },
                     { 7, "J.K. Rowling", "Harry får veta att en farlig fånge, Sirius Black, har rymt från trollkarlsfängelset Azkaban och verkar vara ute efter honom.", "Fantasy", 1999, "Harry Potter och fången från Azkaban" },
@@ -40,7 +108,7 @@ namespace BookReview.Migrations
                     { 25, "Camilla Läckberg", "Erica Falck utforskar sin mammas förflutna efter hennes död och hittar kopplingar till andra världskriget och ett olöst mord.", "Kriminalroman", 2007, "Tyskungen" },
                     { 26, "Camilla Läckberg", "En man hittas död i sitt hem. Han har tagit emot hotbrev, och Patrik och Erica nystar i ett fall som involverar en försvunnen författare.", "Kriminalroman", 2008, "Sjöjungfrun" },
                     { 27, "Camilla Läckberg", "En kvinna och hennes son flyr till Gråskär, men ön bär på mörka hemligheter. Patrik Hedström utreder ett mord som verkar ha kopplingar till öns fyrvaktare.", "Kriminalroman", 2009, "Fyrvaktaren" },
-                    { 28, "Camilla Läckberg", "Ett gammalt fall med en 'änglamakerska' från 1970-talet får ny aktualitet när en serie nya brott med liknande mönster inträffar i Fjällbacka.", "Kriminalroman", 2011, "Änglamakerskan" },
+                    { 28, "Camilla Läckberg", "Ett gammalt fall med en speciell 'änglamakerska' från 1970-talet får ny aktualitet när en serie nya brott med liknande mönster inträffar i Fjällbacka.", "Kriminalroman", 2011, "Änglamakerskan" },
                     { 29, "Camilla Läckberg", "En ung flicka försvinner från en ridskola, och fallet påminner kusligt mycket om ett liknande försvinnande trettio år tidigare.", "Kriminalroman", 2014, "Lejontämjaren" },
                     { 30, "Camilla Läckberg", "Ett fyraårigt flickebarn försvinner, och fallet väcker minnen från ett 30 år gammalt mord på en flicka, vilket skakar om Fjällbacka.", "Kriminalroman", 2017, "Häxan" },
                     { 31, "Camilla Läckberg", "Två brutala mord inträffar i Fjällbacka, och utredningen leder Patrik och Erica mot hemligheter som rör fotografi och konstvärlden.", "Kriminalroman", 2022, "Gökungen" },
@@ -59,215 +127,48 @@ namespace BookReview.Migrations
                     { 44, "Franz Kafka", "En man känd som 'K.' anländer till en by för att arbeta som lantmätare åt det lokala slottet, men han kämpar förgäves mot en oåtkomlig byråkrati för att ens få sitt uppdrag bekräftat.", "Roman", 1926, "Slottet" },
                     { 45, "Franz Kafka", "Den unge Karl Rossmann skickas till Amerika av sina föräldrar. Romanen skildrar hans pikareskartade och ofta surrealistiska resa genom det främmande landet.", "Roman", 1927, "Amerika (Den försvunne)" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Reviews",
+                columns: new[] { "Id", "BookId", "BookId_FK", "CreatedDate", "Rating", "ReviewerName", "Text", "UserId" },
+                values: new object[,]
+                {
+                    { 1, null, 1, new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, "Alice Andersson", "Otroligt gripande bok – kunde inte sluta läsa!", null },
+                    { 2, null, 2, new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), 4, "Björn Berg", "Riktigt spännande, men lite förutsägbar på slutet.", null }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "CreatedAt", "Email", "Name", "PasswordHash", "Role" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "alice@example.com", "Vicke Andersson", "hash123", "Admin" },
+                    { 2, new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "bjorn@example.com", "Björn Berg", "hash456", "User" },
+                    { 3, new DateTime(2025, 10, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "clara@example.com", "Anders Hertig", "hash789", "User" }
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_BookId",
+                table: "Reviews",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_UserId",
+                table: "Reviews",
+                column: "UserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 5);
+            migrationBuilder.DropTable(
+                name: "Reviews");
 
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 6);
+            migrationBuilder.DropTable(
+                name: "Books");
 
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 7);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 8);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 9);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 10);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 11);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 12);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 13);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 14);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 15);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 16);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 17);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 18);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 19);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 20);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 21);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 22);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 23);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 24);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 25);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 26);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 27);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 28);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 29);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 30);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 31);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 32);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 33);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 34);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 35);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 36);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 37);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 38);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 39);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 40);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 41);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 42);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 43);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 44);
-
-            migrationBuilder.DeleteData(
-                table: "Books",
-                keyColumn: "Id",
-                keyValue: 45);
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }
