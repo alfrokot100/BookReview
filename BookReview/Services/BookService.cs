@@ -1,10 +1,7 @@
-﻿using BookReview.Data;
-using BookReview.DTOs.BookDTOs;
+﻿using BookReview.DTOs.BookDTOs;
 using BookReview.Models;
 using BookReview.Repositories.IRepositories;
 using BookReview.Services.IServices;
-using Microsoft.EntityFrameworkCore;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace BookReview.Services
 {

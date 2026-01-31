@@ -31,7 +31,7 @@ namespace BookReview.Services
             return user;
         }
 
-        // Logga in fö användare
+        // Logga in för användare
         public async Task<User?> LoginUserAsync(LoginUserDTO dto)
         {
             var user = await _context.Users

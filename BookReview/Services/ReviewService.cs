@@ -87,7 +87,5 @@ namespace BookReview.Services
             await _reviewRepo.DeleteReviewAsync(reviewId);
             return await _reviewRepo.SaveChangesAsync();
         }
-
-
     }
 }
